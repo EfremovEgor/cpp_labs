@@ -54,15 +54,16 @@ private:
     }
 
 public:
-    void deleteContent(int position)
+    void deleteContent(string name)
     {
-        if (this->marks.size() < position)
+        if (!count(this->names.begin(), this->names.end(), name))
         {
-            throw invalid_argument("Position is larger than contents");
+            throw invalid_argument("Invalid name");
         }
-
-        this->marks.erase(this->marks.begin() + position - 1);
-        this->names.erase(this->names.begin() + position - 1);
+        auto it = find(this->names.begin(), this->names.end(), name);
+        auto index = distance(this->names.begin(), it);
+        this->marks.erase(this->marks.begin() + index);
+        this->names.erase(it);
     };
     void addContent(pair<string, int> content)
     {
@@ -234,16 +235,16 @@ private:
         while (true)
         {
 
-            cout << "Введите номер позиции, чтобы удалить:";
-            int position;
-            cin >> position;
+            cout << "Введите имя, чтобы удалить:";
+            string name;
+            cin >> name;
             try
             {
-                this->studentAnalyzer.deleteContent(position);
+                this->studentAnalyzer.deleteContent(name);
             }
             catch (const invalid_argument e)
             {
-                cout << "\n[Ошибка] Номер позиции должен быть не больше размера контейнера.\n\n";
+                cout << "\n[Ошибка] Имя должно присутствовать в списке.\n\n";
                 continue;
             };
             return;

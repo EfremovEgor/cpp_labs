@@ -22,22 +22,42 @@ vector<pair<string, int>> zip(vector<string> container1, vector<int> container2)
 
 vector<int> ShakerSort(vector<int> a)
 {
-    int m = a.size();
-    int i, j, k;
-    for (i = 0; i < m;)
+
+    bool swapped = true;
+    int n = a.size();
+    int start = 0;
+    int end = n - 1;
+
+    while (swapped)
     {
-        for (j = i + 1; j < m; j++)
+        swapped = false;
+        // Цикл слева направо, как при сортировке пузырьком
+        for (int i = start; i < end; ++i)
         {
-            if (a[j] < a[j - 1])
-                swap(a[j], a[j - 1]);
+            if (a[i] > a[i + 1])
+            {
+                swap(a[i], a[i + 1]);
+                swapped = true;
+            }
         }
-        m--;
-        for (k = m - 1; k > i; k--)
+        // Если ничего не сдвинулось, то массив отсортирован
+        if (!swapped)
+            break;
+        // Иначе нужно сбросить флаг, чтобы его можно было использовать на следующем этапе
+        swapped = false;
+        // сдвинуть конец массива на один, так как значение на последнем месте всегда самое большое
+        --end;
+        // То же самое, только в обратном порядке
+        for (int i = end - 1; i >= start; --i)
         {
-            if (a[k] < a[k - 1])
-                swap(a[k], a[k - 1]);
+            if (a[i] > a[i + 1])
+            {
+                swap(a[i], a[i + 1]);
+                swapped = true;
+            }
         }
-        i++;
+        // Сдвинуть начало массива на один, так как наименьшее значение будет всегда в самом начале
+        ++start;
     }
     return a;
 }
